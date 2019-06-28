@@ -1,0 +1,4 @@
+<launch>
+  <node name="LH_laser_driver" pkg="LH_laser_driver" type="LH_laser_publisher" output="screen"/>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find LH_laser_driver)/rviz/view.rviz"/>
+</launch>

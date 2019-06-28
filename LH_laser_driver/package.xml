@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package>
+  <name>LH_laser_driver</name>
+  <version>1.0.0</version>
+  <description>This driver works with the LH_laser.</description>
+
+  <maintainer email="send2arohan@lh.com">Dr. Liu</maintainer>
+
+
+  <!-- One license tag required, multiple allowed, one license per tag -->
+  <!-- Commonly used license strings: -->
+  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
+  <license>BSD</license>
+
+
+  <url type="website">http://lh.com/LH_laser_driver</url>
+
+  <author>Ping jiang</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>roscpp</build_depend>
+  <run_depend>boost</run_depend>
+
+  <export>
+
+
+  </export>
+</package>

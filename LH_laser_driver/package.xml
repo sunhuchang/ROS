@@ -1,29 +1,18 @@
 <?xml version="1.0"?>
-<package>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
   <name>LH_laser_driver</name>
-  <version>1.0.0</version>
-  <description>This driver works with the LH_laser.</description>
+  <version>0.0.0</version>
+  <description>TODO: Package description</description>
+  <maintainer email="sunhuchang@gmail.com">orion-jetsonnano</maintainer>
+  <license>TODO: License declaration</license>
 
-  <maintainer email="send2arohan@lh.com">Dr. Liu</maintainer>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
-
-  <!-- One license tag required, multiple allowed, one license per tag -->
-  <!-- Commonly used license strings: -->
-  <!--   BSD, MIT, Boost Software License, GPLv2, GPLv3, LGPLv2.1, LGPLv3 -->
-  <license>BSD</license>
-
-
-  <url type="website">http://lh.com/LH_laser_driver</url>
-
-  <author>Ping jiang</author>
-
-  <buildtool_depend>catkin</buildtool_depend>
-  <build_depend>sensor_msgs</build_depend>
-  <build_depend>roscpp</build_depend>
-  <run_depend>boost</run_depend>
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
 
   <export>
-
-
+    <build_type>ament_cmake</build_type>
   </export>
 </package>

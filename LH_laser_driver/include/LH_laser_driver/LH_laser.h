@@ -2,19 +2,19 @@
  *This is demo for ROS refering to xv_11_laser_driver.
  *********************************************************************/
 
-#include <sensor_msgs/LaserScan.h>
-#include <boost/asio.hpp>
-#include <boost/array.hpp>
+#include <sensor_msgs/msg/laser_scan.hpp>
+#include <asio.hpp>
+//#include <array.hpp>
 #include <string>
 
 namespace LH_laser_driver {
     class LHLaser {
         public:
 	      uint16_t rpms; 
-            LHLaser(const std::string& port, uint32_t baud_rate, uint32_t firmware, boost::asio::io_service& io);
+            LHLaser(const std::string& port, uint32_t baud_rate, uint32_t firmware, asio::io_service& io);
             ~LHLaser() {};
 
-            void poll(sensor_msgs::LaserScan::Ptr scan);
+            void poll(sensor_msgs::msg::LaserScan::SharedPtr scan);
 
             void close() { shutting_down_ = true; };
 
@@ -24,7 +24,7 @@ namespace LH_laser_driver {
             uint32_t firmware_; 
 
             bool shutting_down_; 
-            boost::asio::serial_port serial_; 
+            asio::serial_port serial_; 
 	    uint16_t motor_speed_; 
     };
 };

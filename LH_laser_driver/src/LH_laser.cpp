@@ -3,12 +3,12 @@
 
 
 namespace LH_laser_driver {
-using boost::asio::serial_port;
-using boost::asio::serial_port_base;
+using asio::serial_port;
+using asio::serial_port_base;
   LHLaser::LHLaser(const std::string& port,
                    uint32_t baud_rate,
                    uint32_t firmware,
-                   boost::asio::io_service& io) : port_(port),
+                   asio::io_service& io) : port_(port),
                                                   baud_rate_(baud_rate),
                                                   firmware_(firmware),
                                                   shutting_down_(false),
@@ -48,12 +48,12 @@ using boost::asio::serial_port_base;
   }
 
   int K = 0;
-  void LHLaser::poll(sensor_msgs::LaserScan::Ptr scan) {
+  void LHLaser::poll(sensor_msgs::msg::LaserScan::SharedPtr scan) {
     uint8_t temp_char;
     uint8_t start_count = 0;
     bool got_scan = false;
     if(firmware_ == 2) {
-      boost::array<uint8_t, 1980> raw_bytes;
+      std::array<uint8_t, 1980> raw_bytes;
       start_count = 0;
       typedef boost::multi_array<uint16_t, 2> j_array;
       j_array A(boost::extents[10][510]);
@@ -66,17 +66,31 @@ using boost::asio::serial_port_base;
       rpms = 0;
       int index=0;
       while (!shutting_down_ && !got_scan) {
-        boost::asio::read(serial_,
-                          boost::asio::buffer(&raw_bytes[start_count],
+        asio::read(serial_,
+                          asio::buffer(&raw_bytes[start_count],
                           1));
         if (start_count == 0) {
+          //printf("\nsunhuchang debug raw_bytes[%d]=0x%x",start_count,raw_bytes[start_count]);
           if (raw_bytes[start_count] == 0xCE) {
             start_count = 1;
           }
+#if 1
+            asio::read(serial_,
+                          asio::buffer(&raw_bytes[0],
+                          256));
+            for (int index=0;index<256;index++){
+                if (index%16==0)
+                   printf("\n");
+                printf("0x%x ",raw_bytes[index]);
+            }
+#endif          
         } else if (start_count == 1) {
+          //printf("\nsunhuchang debug raw_bytes[%d]=0x%x",start_count,raw_bytes[start_count]);
           if (raw_bytes[start_count] == 0xFA) {
             start_count = 0;
-            boost::asio::read(serial_,boost::asio::buffer(&raw_bytes[2], 4));
+            asio::read(serial_,asio::buffer(&raw_bytes[2], 4));
+            //for (int index=0;index<4;index++)
+             //   printf("\nsunhuchang debug raw_bytes[2+index]=0x%x ",raw_bytes[2+index]);
             uint32_t CheckSum=0;
             uint32_t CheckSum1=0;
             j_num_readings=raw_bytes[2]+raw_bytes[3]*256;
@@ -85,10 +99,15 @@ using boost::asio::serial_port_base;
             A[j_angle/360][0]=j_num_readings;
             CheckSum+=j_angle;
             CheckSum+=A[j_angle/360][0];
-            printf("j_angle%d;points%d\n",j_angle,j_num_readings);
-            boost::asio::read(serial_,
-                              boost::asio::buffer(&raw_bytes[6],
+            printf("\nj_angle%d;points%d\n",j_angle,j_num_readings);
+            asio::read(serial_,
+                              asio::buffer(&raw_bytes[6],
                                                   j_num_readings * 2 + 2));
+            for (int index=0;index<(j_num_readings * 2 + 2);index++){
+                if (index%16==0)
+                   printf("\n");
+                printf("sunhuchang debug raw_bytes[6+index]=0x%x ",raw_bytes[6+index]);
+            }
             for(uint16_t i = 0; i < j_num_readings; i++){
               A[j_angle/360][i+1]=raw_bytes[6+i*2] + (raw_bytes[7+i*2])*256;
               CheckSum+=A[j_angle/360][i+1];

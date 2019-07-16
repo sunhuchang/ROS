@@ -11,6 +11,7 @@ the 2 files in cartographer_ros should be copy to :
   
   Noticed:
   modify below info in lua file:
+  
   "-configuration_directory","/home/orion-jetsonnano/sunhuchang/ros2/cartographer_ros/cartographer_ros/configuration_files"
  
   

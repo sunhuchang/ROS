@@ -18,7 +18,7 @@ using asio::serial_port_base;
     serial_.set_option(serial_port::parity(serial_port::parity::none));
     serial_.set_option(serial_port::stop_bits(serial_port::stop_bits::one));
     serial_.set_option(serial_port::character_size(8));
-
+#if 0
     int fd = serial_.native_handle();
     struct termios opt;
     tcgetattr(fd, &opt);
@@ -45,6 +45,7 @@ using asio::serial_port_base;
       printf("start send and receive data\n");
       fcntl(fd, F_SETFL, 0);
     }
+#endif
   }
 
   int K = 0;
@@ -74,7 +75,7 @@ using asio::serial_port_base;
           if (raw_bytes[start_count] == 0xCE) {
             start_count = 1;
           }
-#if 1
+#if 0
             asio::read(serial_,
                           asio::buffer(&raw_bytes[0],
                           256));
@@ -99,21 +100,23 @@ using asio::serial_port_base;
             A[j_angle/360][0]=j_num_readings;
             CheckSum+=j_angle;
             CheckSum+=A[j_angle/360][0];
-            printf("\nj_angle%d;points%d\n",j_angle,j_num_readings);
+            //printf("\nj_angle%d;points%d\n",j_angle,j_num_readings);
             asio::read(serial_,
                               asio::buffer(&raw_bytes[6],
                                                   j_num_readings * 2 + 2));
+#if 0
             for (int index=0;index<(j_num_readings * 2 + 2);index++){
                 if (index%16==0)
                    printf("\n");
                 printf("sunhuchang debug raw_bytes[6+index]=0x%x ",raw_bytes[6+index]);
             }
+#endif
             for(uint16_t i = 0; i < j_num_readings; i++){
               A[j_angle/360][i+1]=raw_bytes[6+i*2] + (raw_bytes[7+i*2])*256;
               CheckSum+=A[j_angle/360][i+1];
             }
             if ((uint16_t)CheckSum==(uint16_t)(raw_bytes[6+j_num_readings*2] + (raw_bytes[7 +j_num_readings*2])*256u))
-              printf("j_angle%d 's reading is ok\n",j_angle);
+              ;//printf("j_angle%d 's reading is ok\n",j_angle);
             else {
               printf("j_angle%d 's CheckSum is bad\n",j_angle);
               continue;

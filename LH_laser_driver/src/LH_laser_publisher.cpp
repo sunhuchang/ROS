@@ -51,18 +51,18 @@ node->get_parameter("firmware_version", firmware_number);
     //rclcpp::Publisher motor_pub = n.advertise<std_msgs::UInt16>("rpms",1500);
     auto motor_pub = node->create_publisher<std_msgs::msg::UInt16>("rpms",rmw_qos_profile_default);
     while (rclcpp::ok()) {
-RCLCPP_ERROR(node->get_logger(),"sunhuchang debug LH_laser pos1");
+//RCLCPP_ERROR(node->get_logger(),"sunhuchang debug LH_laser pos1");
       sensor_msgs::msg::LaserScan::SharedPtr scan(new sensor_msgs::msg::LaserScan);
       scan->header.frame_id = frame_id;
       rclcpp::Clock ros_clock(RCL_ROS_TIME);
       scan->header.stamp = ros_clock.now();
-RCLCPP_ERROR(node->get_logger(),"sunhuchang debug LH_laser pos2");
+//RCLCPP_ERROR(node->get_logger(),"sunhuchang debug LH_laser pos2");
       laser.poll(scan);
-RCLCPP_ERROR(node->get_logger(),"sunhuchang debug LH_laser pos3");
+//RCLCPP_ERROR(node->get_logger(),"sunhuchang debug LH_laser pos3");
       rpms.data=laser.rpms;
       laser_pub->publish(scan);
       motor_pub->publish(rpms);
-      RCLCPP_ERROR(node->get_logger(),"sunhuchang debug LH_laser rpms=%d", rpms.data);
+//      RCLCPP_ERROR(node->get_logger(),"sunhuchang debug LH_laser rpms=%d", rpms.data);
 
     }
     laser.close();
